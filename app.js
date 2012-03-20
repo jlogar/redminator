@@ -44,24 +44,6 @@ app.get('/redmine/:operation?/:id?', function(req, res) {
         list(res);
         return;
     }
-	/*var r = new api_request('http', 'redmine.e-soft.si');
-	r.get('/activity.atom?key=c122a258dbafaaf2f957a7eabfc4ba3ad45e98cf')
-	.on('reply', function(reply){
-		console.log('got reply');
-		//res.json(reply.items);
-		res.send("123");
-	});*/
-});
-
-app.get('/gohome', function (req, res) {
-	var r = new api_request('http', 'www.gohome.si');
-	r.get('/Search.aspx?q=stanovanje+%C5%A1kofja+loka+najnovej%C5%A1e')
-    .on('reply', function(reply) {
-      $ = cheerio.load(reply);
-	  var gohomeResult = _.map($('.JQResult.item', '#results'), function(num) {return num.attribs;});
-	  console.log(gohomeResult.length);
-	  res.json({items : gohomeResult});
-    });
 });
 
 app.listen(3000);
