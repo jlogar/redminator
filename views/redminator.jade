@@ -15,8 +15,12 @@ html(lang="en")
     #controls.grids
         .grid-12
             input(type='button', value='refresh')#refresh
+            input(type='text', placeholder='ur server')#server-url
+            input(type='button', value='add')#add
     #container.grids
         #left.grid-6
-            p 123
+            ul#left-items
         #right.grid-6
             p 123
+    script(type='text/template', id='item-template')
+        <li><%= title %></li>

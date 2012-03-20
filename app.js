@@ -29,21 +29,26 @@ app.get('/redminator', function(req, res) {
 });
 
 function list(res) {
-    parser.parseURL('http://redmine.e-soft.si/activity.atom?key=c122a258dbafaaf2f957a7eabfc4ba3ad45e98cf', {}, function(err, out){
+    parser.parseURL('http://redmine.e-soft.si/projects/telargo/issues.atom?key=c122a258dbafaaf2f957a7eabfc4ba3ad45e98cf&query_id=1', {}, function(err, out){
 		console.log('got osmething');
 		res.json(out.items);
 	});
 }
 
-app.get('/redmine/:operation?/:id?', function(req, res) {
+app.get('/redmine/:operation?/:id?', function(req, res, next) {
 	var op = (req.params.operation === undefined) ? 'list' : req.params.operation;
-	console.log("id:" + req.params.id);
-	console.log("op:" + op);
-	console.log('starting request');
     if (op === 'list') {
         list(res);
         return;
     }
+	console.log("id:" + req.params.id);
+	console.log("op:" + op);
+	console.log('starting request');
+    res.send("123");
+});
+
+app.get('/redmine/list/', function(req, res) {
+    list(res);
 });
 
 app.listen(3000);

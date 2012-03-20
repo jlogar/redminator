@@ -1,39 +1,61 @@
 $(function() {
-	var RedmineModel = Backbone.Model.extend({
-		initialize:function(item){
-			this.title = item.title;
-		}
-	});
-	var RedmineList = Backbone.Collection.extend({
-		model: RedmineModel,
-		url: '/redmine/',
-		initialize: function (models, options){
-		},
-		allTitles: function() {
-			return this.map(function(x){
-				return x.title;
-			});
-		}
-	});
-	var RedmineView = Backbone.View.extend({
-		tagname:'li',
-	});
+    var RedmineIssue = Backbone.Model.extend({
+        initialize:function(item){
+            this.title = item.title;
+        }
+    });
+    var RedmineList = Backbone.Collection.extend({
+        model: RedmineIssue,
+        url: '/redmine/',
+        initialize: function (models, options){
+        },
+        allTitles: function() {
+            return this.map(function(x){
+                return x.title;
+            });
+        }
+    });
+    var RedmineIssueRow = Backbone.View.extend({
+        tagname:'li',
+        template: _.template($('#item-template').html()),
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        }
+    });
 
-	$('#refresh').button().click(function() {
-					var list = new RedmineList();
-					list.on('reset', function(collection){
-						console.log(collection.allTitles().join("\n"));
-					});
-                    list.on('add', function(obj){
-						console.log(obj.title);
-					});
-					list.fetch({add:false});
-                    //list.add([{title:'test'}]);
-					//$.ajax('/redmine')
-					//.done(function(res) {
-					//	var items = _.map(res.items, function(x){return new RedmineModel(x);});
-					//	var list = new RedmineList(items);
-					//	_.each(list.allTitles(), function(x){console.log(x);});
-					//});
-				});
+    var RedminatorView = Backbone.View.extend({
+        el: '#controls',
+        events: {
+            "click #refresh": "refresh",
+            "click #add": 'addServer'
+        },
+        servers: new Backbone.Collection,
+        initialize: function() {
+            this.list = new RedmineList;
+            this.list.bind('reset', this.addAll, this);
+            this.list.fetch({add:false});
+            //this.render();
+        },
+        addAll: function() {
+            $('#left-items').empty();
+            this.list.each(this.addOne);
+        },
+        addOne:function (redmineIssue) {
+            var view = new RedmineIssueRow({model: redmineIssue});
+            $('#left-items').append(view.render().el);
+        },
+        refresh: function() {
+            $('#left-items').empty();
+            this.list.fetch();
+        },
+        addServer: function() {
+            this.servers.add({url: $("#server-url").val()});
+        }
+        //render:function() {
+        //    
+        //}
+    });
+    
+    var redminator = new RedminatorView;
 });
