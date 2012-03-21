@@ -7,54 +7,82 @@ $(function() {
     var RedmineList = Backbone.Collection.extend({
         model: RedmineIssue,
         url: '/redmine/',
-        initialize: function (models, options){
-        },
-        allTitles: function() {
-            return this.map(function(x){
-                return x.title;
-            });
+        sync: Backbone.ajaxSync,
+        initialize:function(params) {
+            this.redmineUrl = params.redmineUrl;
+            this.url = this.url + "?redmineUrl=" + this.redmineUrl;
         }
     });
     var RedmineIssueRow = Backbone.View.extend({
-        tagname:'li',
+        tagName:'li',
         template: _.template($('#item-template').html()),
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
             return this;
         }
     });
+    var RedmineServer = Backbone.Model.extend({
+    });
+    var ServerList = Backbone.Collection.extend({
+        model: RedmineServer,
+        localStorage: new Backbone.LocalStorage("redmineServers")
+    });
+    var ServerRow = Backbone.View.extend({
+        className: 'grid-3',
+        events: {
+            'click .delete': 'destroy',
+            'click .refresh': 'refresh'
+        },
+        template: _.template($('#server-template').html()),
+        initialize: function() {
+            this.issues = new RedmineList({redmineUrl: this.model.get('url')});
+            this.issues.bind('reset', this.addAll, this);
+            this.issues.fetch({add:false/*, data: {redmineUrl: this.model.get('url')}*/});
+        },
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        },
+        addAll: function() {
+            $('.items', this.$el).empty();
+            this.issues.each(this.addOne, this);
+        },
+        addOne:function (redmineIssue) {
+            var view = new RedmineIssueRow({model: redmineIssue});
+            $('.items', this.$el).append(view.render().el);
+        },
+        destroy: function() {
+            console.log(this.model.get('name'));
+            this.model.destroy();
+            this.$el.remove();
+        },
+        refresh: function() {
+            this.issues.fetch({add:false});
+        }
+    });
 
     var RedminatorView = Backbone.View.extend({
         el: '#controls',
         events: {
-            "click #refresh": "refresh",
-            "click #add": 'addServer'
+            'click #add': 'addServer'
         },
-        servers: new Backbone.Collection,
+        servers: new ServerList,
         initialize: function() {
-            this.list = new RedmineList;
-            this.list.bind('reset', this.addAll, this);
-            this.list.fetch({add:false});
-            //this.render();
-        },
-        addAll: function() {
-            $('#left-items').empty();
-            this.list.each(this.addOne);
-        },
-        addOne:function (redmineIssue) {
-            var view = new RedmineIssueRow({model: redmineIssue});
-            $('#left-items').append(view.render().el);
-        },
-        refresh: function() {
-            $('#left-items').empty();
-            this.list.fetch();
+            this.servers.bind('reset', this.refreshServers, this);
+            this.servers.fetch({add:false});
         },
         addServer: function() {
-            this.servers.add({url: $("#server-url").val()});
+            var serverModel = new RedmineServer({url: $("#server-url").val(), name: $("#server-name").val()});
+            this.servers.add(serverModel);
+            serverModel.save();
+            this.renderServer(serverModel);
+        },
+        renderServer: function(serverModel) {
+            $('#servers').append((new ServerRow({model: serverModel})).render().el);
+        },
+        refreshServers: function() {
+            this.servers.each(this.renderServer);
         }
-        //render:function() {
-        //    
-        //}
     });
     
     var redminator = new RedminatorView;

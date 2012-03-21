@@ -28,8 +28,8 @@ app.get('/redminator', function(req, res) {
 	res.render('redminator');
 });
 
-function list(res) {
-    parser.parseURL('http://redmine.e-soft.si/projects/telargo/issues.atom?key=c122a258dbafaaf2f957a7eabfc4ba3ad45e98cf&query_id=1', {}, function(err, out){
+function list(res, url) {
+    parser.parseURL(url, {}, function(err, out){
 		console.log('got osmething');
 		res.json(out.items);
 	});
@@ -38,7 +38,7 @@ function list(res) {
 app.get('/redmine/:operation?/:id?', function(req, res, next) {
 	var op = (req.params.operation === undefined) ? 'list' : req.params.operation;
     if (op === 'list') {
-        list(res);
+        list(res, req.query.redmineUrl);
         return;
     }
 	console.log("id:" + req.params.id);
