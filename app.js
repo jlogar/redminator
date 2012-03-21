@@ -29,8 +29,8 @@ app.get('/redminator', function(req, res) {
 });
 
 function list(res, url) {
+console.log(url);
     parser.parseURL(url, {}, function(err, out){
-		console.log('got osmething');
 		res.json(out.items);
 	});
 }
@@ -41,14 +41,6 @@ app.get('/redmine/:operation?/:id?', function(req, res, next) {
         list(res, req.query.redmineUrl);
         return;
     }
-	console.log("id:" + req.params.id);
-	console.log("op:" + op);
-	console.log('starting request');
-    res.send("123");
-});
-
-app.get('/redmine/list/', function(req, res) {
-    list(res);
 });
 
 app.listen(3000);

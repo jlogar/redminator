@@ -10,7 +10,7 @@ $(function() {
         sync: Backbone.ajaxSync,
         initialize:function(params) {
             this.redmineUrl = params.redmineUrl;
-            this.url = this.url + "?redmineUrl=" + this.redmineUrl;
+            this.url = this.url + "?redmineUrl=" + encodeURIComponent(this.redmineUrl);
         }
     });
     var RedmineIssueRow = Backbone.View.extend({
