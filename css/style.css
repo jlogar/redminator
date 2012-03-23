@@ -141,3 +141,7 @@ hr{
 	height:1px;
 	background-color:#ccc;
 }
+
+#servers {
+    margin-bottom: 1.5rem;
+}
