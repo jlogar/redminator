@@ -91,16 +91,18 @@ html{
 }
 
 
-
-
-
 /*------------------------------------*\
-	$FOOTER
+	FOOTER
 \*------------------------------------*/
-.footer{
-	padding-top:1.5em;
-	border-top:1px solid #ccc;
-	color:#999;
+#footer{
+	background:url(../img/css/page/page-top.gif) top left repeat-x #333;
+	color:#fff;
+	text-shadow:1px 1px 1px rgba(0,0,0,0.5);
+	padding:20px 10px 10px;
+	margin:0 -10px;
+}
+#footer p{
+	margin:0;
 }
 
 
