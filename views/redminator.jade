@@ -13,20 +13,29 @@ html(lang="en")
     script(type='text/javascript', src='/js/backbone.localstorage.js')
     script(type='text/javascript', src='/js/redminator.js')
   body.wrapper
-    h1 Redminator&mdash;terminate your Redmines&hellip;
+    h1
+        a(href="https://github.com/jlogar/redminator") Redminator
+        &mdash;terminate your Redmines&hellip;
     #controls.grids
         .grid-12
-            input(type='text', placeholder='ur server name')#server-name
-            input(type='text', placeholder='ur server url')#server-url
-            input(type='button', value='add')#add
+            p Server: 
+                input(type='text', placeholder='ur server name')#server-name
+                input(type='text', placeholder='ur server url')#server-url
+                input(type='button', value='add')#add
+    hr
     #servers.grids
+    #footer
+        p &copy; Jernej Logar,
+        a(href="http://www.e-soft.si/") E-soft d.o.o.
+        <p><a href="http://twitter.com/redminator" class="twitter-follow-button">Follow @redminator</a> <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script></p>
+    </div>
     script(type='text/template', id='item-template')
         <a href="<%= link %>"><%= title %></a>
     script(id='server-template', type='text/template')
         <div>
-        <input type="button" class="refresh" value="refresh" /><input type="button" class="delete" value="delete" /><%= name %>
-        </div>
-        <div>
         <ul class="items">
         </ul>
+        </div>
+        <div>
+        <input type="button" class="refresh" value="refresh" /><input type="button" class="delete" value="delete" /><%= name %>
         </div>

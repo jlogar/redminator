@@ -5,6 +5,13 @@ Aggregate and edit multiple redmine instances or projects in one place.
 
 Also my first take on [node.js](http://nodejs.org/), [backbone.js](http://documentcloud.github.com/backbone/) and [Jade](http://jade-lang.com/).
 
+Use
+========
+
+To run Redminator just use:
+
+    $ node app.js
+
 The HTML
 --------
 
