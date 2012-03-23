@@ -3,7 +3,7 @@ var _ = require('underscore');
 var parser = require('blindparser');
 //var api_request = require('api_request');
 var express = require('express');
-var app = express.createServer();
+var app = express.createServer(express.logger());
 var util = require('util');
 var fs = require('fs');
 
@@ -43,4 +43,8 @@ app.get('/redmine/:operation?/:id?', function(req, res, next) {
     }
 });
 
-app.listen(3000);
+var port = process.env.PORT || 3000;
+
+app.listen(port, function() {
+    console.log("Listening on port " + port + "."); 
+});
