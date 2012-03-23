@@ -2,6 +2,7 @@ $(function() {
     var RedmineIssue = Backbone.Model.extend({
         initialize:function(item){
             this.title = item.title;
+            this.link = item.link;
         }
     });
     var RedmineList = Backbone.Collection.extend({
