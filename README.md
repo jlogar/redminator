@@ -3,7 +3,7 @@ Redminator
 
 Aggregate and edit multiple redmine instances or projects in one place.
 
-Also my first take on [node.js](http://nodejs.org/) and [backbone.js](http://documentcloud.github.com/backbone/).
+Also my first take on [node.js](http://nodejs.org/), [backbone.js](http://documentcloud.github.com/backbone/) and [Jade](http://jade-lang.com/).
 
 The HTML
 --------
